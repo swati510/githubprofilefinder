@@ -1,0 +1,68 @@
+<html>
+<head>
+     <title>Github Profile Finder</title>
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+     <style>
+     img{
+         width: 100%
+     }</style>
+</head>
+<body>
+    <form id="userForm">
+        <div class= "form-group">
+            <label>Github username: </label>
+            <input type="text", id ="username" class="form-control">
+            
+        </div>
+    </form>
+    <div id="profile"></div>
+    <script>
+        function getProfile(e){
+            e.preventDefault();
+            console.log("fecthing..");
+            var username=document.getElementById('username').value;
+            if(!username||username==""){
+                username='swati510';
+            }
+            var xhttp= new XMLHttpRequest();
+            xhttp.onreadystatechange = function(){
+                if(xhttp.readyState==4&& xhttp.status==200){
+                    var user = JSON.parse( xhttp.responseText);
+                    document.getElementById('profile').innerHTML=`
+                    <div class="card">
+                     <div class="card-header">
+                       ${user.name}
+                     </div>
+                   <div class="card-body">
+                    
+                   
+                     <div class ="row">
+                     <div class ="col-md-3">
+                        <img src="${user.avatar_url}">
+                     </div>
+                     <div class ="col-md-9">
+                            <span class="badge badge-danger">Public Repos ${user.public_repos}</span>
+                         <span class="badge badge-warning">Public Gists ${user.public_gists}</span><br><br>
+                         <ul class="list-group">
+                            <li class ="list-group-item">Website: ${user.blog}</li>
+                            <li class ="list-group-item">Email: ${user.email}</li>
+                            <li class ="list-group-item">Company: ${user.company}</li>
+                            <li class ="list-group-item">Location: ${user.location}</li>
+                            <li class ="list-group-item">Bio: ${user.bio}</li>
+                            <li class ="list-group-item">Followers: ${user.followers}</li>
+                            <li class ="list-group-item">Following: ${user.following}</li>
+                        </ul><br>
+                        <a class ="btn btn-primary" target ="_blank" href =${user.html_url}>Visit Github</a>
+                      </div>
+                     </div>
+                   </div>
+                   </div>`
+                }
+            }
+            xhttp.open('GET','https://api.github.com/users/'+username,true);
+            xhttp.send();
+        }
+        document.getElementById('userForm').addEventListener('submit',getProfile);
+    </script>
+ </body>
+</html>
